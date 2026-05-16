@@ -16,6 +16,7 @@ public class AstPrinter implements Visitor<String> {
         return parenthesize(expr.operator.lexeme, expr.left, expr.right);
     }
 
+   
     @Override
     public String visitGroupingExpr(Grouping expr) {
         return parenthesize("group", expr.expression);
@@ -36,12 +37,23 @@ public class AstPrinter implements Visitor<String> {
     private String parenthesize(String name, Expr... exprs) {
         StringBuilder builder = new StringBuilder();
 
+        for (Expr expr : exprs) {
+            builder.append(expr.accept(this));
+            builder.append(" ");
+        }
+        builder.append(name);
+
+        return builder.toString();
+    }
+
+    private String parenthesizeRPN(String name, Expr... exprs) {
+        StringBuilder builder = new StringBuilder();
+
         builder.append("(").append(name);
         for (Expr expr : exprs) {
             builder.append(" ");
             builder.append(expr.accept(this));
         }
-        builder.append(")");
 
         return builder.toString();
     }
