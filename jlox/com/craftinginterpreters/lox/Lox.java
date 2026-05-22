@@ -46,13 +46,19 @@ public class Lox {
 		Scanner scanner = new Scanner(source);
 		List<Token> tokens = scanner.scanTokens();
 
+		for (Token token : tokens) {
+			System.out.println(token);
+		}
+
+		System.out.println("==============================");
+
 		Parser parser = new Parser(tokens);
 		Expr expr = parser.parse();
 
 		// Parar se tiver erro sintático
 		if (hadError) return;
 
-		System.out.println(new AstPrinter().print(expr));
+		System.out.println("\033[32m"+new AstPrinter().print(expr)+"\033[m");
 	}
 
 	static void error(int line, String message) {
