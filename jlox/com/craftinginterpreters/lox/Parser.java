@@ -22,9 +22,17 @@ public class Parser {
 		}
 	}
 
-	// expression → equality ;
+	// expression → equality ( "," equality )*;  
 	private Expr expression() {
-		return equality();
+		Expr expr = equality();
+
+		while (match(COMMA)) {
+			Token operator = previous();
+			Expr right = equality();
+			expr = new Expr.Binary(expr, operator, right);
+		}
+
+		return expr;
 	}
 
 	// equality → comparison ( ( "!=" | "==" ) comparison )* ;
